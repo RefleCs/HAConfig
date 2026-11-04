@@ -98,65 +98,6 @@ template:
             'restafval': 'Restafval'
           }.get(states('sensor.afvalwijzer_day_after_tomorrow'), 'Geen') }}
 
-#########################
-######## Sensors ########
-#########################
-
-# sensor:
-#  - platform: template
-#    sensors:
-#      afvalwijzer_next_type_formatted:
-#        value_template: >-
-#          {% if is_state('sensor.afvalwijzer_next_type', 'gft') %}GFT
-#          {% elif is_state('sensor.afvalwijzer_next_type', 'oud papier en karton') %}Papier
-#          {% elif is_state('sensor.afvalwijzer_next_type', 'pmd') %}PMD
-#          {% else %}Geen
-#          {% endif %}
-#        friendly_name: "Next pickup item"
-
-#      afvalwijzer_today_formatted:
-#        value_template: >-
-#          {% if is_state('sensor.afvalwijzer_today', 'gft') %}GFT
-#          {% elif is_state('sensor.afvalwijzer_today', 'oud papier en karton') %}Papier
-#          {% elif is_state('sensor.afvalwijzer_today', 'pmd') %}PMD
-#          {% else %}Geen
-#          {% endif %}
-#        friendly_name: "Vandaag"
-
-#      afvalwijzer_tomorrow_formatted:
-#        value_template: >-
-#          {% if is_state('sensor.afvalwijzer_tomorrow', 'gft') %}GFT
-#          {% elif is_state('sensor.afvalwijzer_tomorrow', 'oud papier en karton') %}Papier
-#          {% elif is_state('sensor.afvalwijzer_tomorrow', 'pmd') %}PMD
-#          {% else %}Geen
-#          {% endif %}
-#        friendly_name: "Morgen"
-
-#      afvalwijzer_day_after_tomorrow_formatted:
-#        value_template: >-
-#          {% if is_state('sensor.afvalwijzer_day_after_tomorrow', 'gft') %}GFT
-#          {% elif is_state('sensor.afvalwijzer_day_after_tomorrow', 'oud papier en karton') %}Papier
-#          {% elif is_state('sensor.afvalwijzer_day_after_tomorrow', 'pmd') %}PMD
-#          {% else %}Geen
-#          {% endif %}
-#        friendly_name: "Overmorgen"
-
-#  - platform: template
-#    sensors:
-#      afvalwijzer_gft_formatted:
-#        friendly_name: "GFT"
-#        value_template: "{{ as_timestamp(states['sensor.afvalwijzer_gft'].state) | timestamp_custom('%d-%m-%Y') }}"
-#        entity_picture_template: /local/afvalwijzer/gft3.png
-#
-#      afvalwijzer_papier_formatted:
-#        friendly_name: "Papier"
-#        value_template: "{{ as_timestamp(states['sensor.afvalwijzer_papier'].state) | timestamp_custom('%d-%m-%Y') }}"
-#        entity_picture_template: /local/afvalwijzer/papier3.png
-#
-#      afvalwijzer_pmd_formatted:
-#        friendly_name: "PMD"
-#        value_template: "{{ as_timestamp(states['sensor.afvalwijzer_pmd'].state) | timestamp_custom('%d-%m-%Y') }}"
-#        entity_picture_template: /local/afvalwijzer/pmd3.png
 
 ############################
 ######## Automation ########
