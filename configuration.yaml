@@ -11,7 +11,8 @@ homeassistant:
   packages: !include_dir_named packages
   allowlist_external_dirs:
     - "/config/tmp"
-    
+
+#tts
 tts:
   - platform: google_translate
 
@@ -23,7 +24,7 @@ spotcast:
   sp_dc: !secret sp_dc
   sp_key: !secret sp_key
 
-# Includes
+#Includes
 group: !include groups.yaml
 automation: !include automations.yaml
 script: !include scripts.yaml
@@ -40,7 +41,7 @@ google_assistant:
   project_id: smart-home-26632
   service_account: !include smart-home-26632-50f5fa1b1594.json
   report_state: true
-  expose_by_default: true
+  expose_by_default: false
 
 ## DVD Library
 
