@@ -141,17 +141,25 @@
   mode: single
 - id: '1646428789093'
   alias: 'Car: Notify if Update is Available'
-  description: ''
+  description: Stuurt een notificatie met de versie van de update die klaarstaat voor
+    The Big Whisperer.
   triggers:
-  - type: turned_on
-    device_id: 7d9c901b82a3c003a88597d56798ca78
-    entity_id: 3ea4466980cbaf8bb8e0801d3d99b7a8
-    domain: update
-    trigger: device
+  - target:
+      entity_id: update.the_big_whisperer_software_update
+    trigger: update.became_available
   conditions: []
   actions:
   - action: notify.mobile_app_robs_s26_ultra
-    data: {}
+    data:
+      data:
+        clickAction: '{{ state_attr(''update.the_big_whisperer_software_update'',
+          ''release_url'') }}'
+        url: '{{ state_attr(''update.the_big_whisperer_software_update'', ''release_url'')
+          }}'
+      message: 'Versie {{ state_attr(''update.the_big_whisperer_software_update'',
+        ''latest_version'') }} staat klaar (huidig: {{ state_attr(''update.the_big_whisperer_software_update'',
+        ''installed_version'') }}).'
+      title: 'The Big Whisperer: update beschikbaar'
   mode: single
 - id: '1670270729193'
   alias: 'Lights: Achtertuin - Gardenposts - Turn off at midnight'
