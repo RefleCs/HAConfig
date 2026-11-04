@@ -163,7 +163,7 @@ template:
 ############################
 
 automation:
-  - alias: "Afvalwijzer: AbN - Mark waste as moved"
+  - alias: "PKG_Afvalwijzer: AbN - Mark waste as moved"
     id: 004a2fe1-bcf7-4d59-9cd1-ce07f2f6f84c
     description: >-
       AbN = Action by Notification = Een actie van een eerdere notification triggert
@@ -186,7 +186,7 @@ automation:
           title: "Afval: Dank u"
         action: notify.family
 
-  - alias: "Afval: Notification - Waste has not been moved"
+  - alias: "PKG_Afval: Notification - Waste has not been moved"
     id: 50abc2ca-9956-4822-81ef-0f8455167232
     triggers:
       - hours: /1
@@ -222,7 +222,7 @@ automation:
               category: afval
         action: notify.family
 
-  - alias: "Afvalwijzer: Reset waste notification"
+  - alias: "PKG_Afvalwijzer: Reset waste notification"
     id: 0bcc81e4-9491-4da0-a2b4-0a133e9740fd
     triggers:
       - entity_id: input_boolean.waste_moved
