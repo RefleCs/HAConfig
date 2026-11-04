@@ -1,0 +1,228 @@
+"""Afvalwijzer mijnafvalwijzer."""
+
+from __future__ import annotations
+
+from datetime import datetime, timedelta
+from html import unescape
+import logging
+import re
+
+import requests
+
+from ..common.main_functions import format_postal_code, waste_type_rename
+from ..const.const import SENSOR_COLLECTORS_MIJNAFVALWIJZER
+
+_LOGGER = logging.getLogger(__name__)
+
+_DEFAULT_TIMEOUT: tuple[float, float] = (5.0, 60.0)
+
+
+def _build_url(
+    provider: str,
+    postal_code: str,
+    house_number: str,
+    suffix: str,
+) -> str:
+    if provider not in SENSOR_COLLECTORS_MIJNAFVALWIJZER:
+        raise ValueError(f"Invalid provider: {provider}, please verify")
+
+    corrected_postal_code = format_postal_code(postal_code)
+
+    return SENSOR_COLLECTORS_MIJNAFVALWIJZER[provider].format(
+        corrected_postal_code,
+        house_number,
+        suffix,
+    )
+
+
+def _fetch_data(
+    session: requests.Session,
+    url: str,
+    *,
+    timeout: tuple[float, float],
+    verify: bool,
+) -> dict:
+    response = session.get(
+        url,
+        timeout=timeout,
+        verify=verify,
+    )
+    response.raise_for_status()
+    return response.json()
+
+
+def _parse_waste_data_raw(response: dict, postal_code: str = "") -> list[dict]:
+    ophaaldagen_data = response.get("ophaaldagen", {}).get("data", [])
+    ophaaldagen_next_data = response.get("ophaaldagenNext", {}).get("data", [])
+
+    if not ophaaldagen_data and not ophaaldagen_next_data:
+        raise KeyError("No 'ophaaldagen' data found")
+
+    # Keep original behavior: limit next items to 25
+    items = ophaaldagen_data + ophaaldagen_next_data[:25]
+
+    waste_data_raw: list[dict[str, str]] = []
+    for item in items:
+        date_str = item.get("date")
+        if not date_str:
+            continue
+
+        waste_type = waste_type_rename(
+            (item.get("type") or "").strip().lower(), postal_code
+        )
+        if not waste_type:
+            continue
+
+        # Many municipalities report PMD under the generic "plastic" type code;
+        # the human readable "nameType" tells whether it is really PMD.
+        if waste_type == "plastic":
+            name_type = waste_type_rename(
+                (item.get("nameType") or "").strip().lower(), postal_code
+            )
+            if name_type == "pmd":
+                waste_type = "pmd"
+
+        # Fixes original bug: previous code created a tuple and returned datetime object.
+        # Keep intended output format consistent with other collectors: YYYY-MM-DD string.
+        waste_date = datetime.strptime(date_str, "%Y-%m-%d").strftime("%Y-%m-%d")
+
+        waste_data_raw.append({"type": waste_type, "date": waste_date})
+
+    return waste_data_raw
+
+
+def get_waste_data_raw(
+    provider: str,
+    postal_code: str,
+    house_number: str,
+    suffix: str,
+    *,
+    session: requests.Session | None = None,
+    timeout: tuple[float, float] = _DEFAULT_TIMEOUT,
+    verify: bool = True,
+) -> list[dict]:
+    """Return waste_data_raw."""
+
+    session = session or requests.Session()
+    url = _build_url(provider, postal_code, house_number, suffix)
+
+    # Add afvaldata parameter to get afvaldata only from today onwards; this reduces the response size
+    url = f"{url}&afvaldata={datetime.now().strftime('%Y-%m-%d')}"
+
+    try:
+        response = _fetch_data(
+            session,
+            url,
+            timeout=timeout,
+            verify=verify,
+        )
+
+        waste_data_raw = _parse_waste_data_raw(response, postal_code)
+        return waste_data_raw
+
+    except requests.exceptions.RequestException as err:
+        _LOGGER.error("MijnAfvalWijzer request error: %s", err)
+        raise ValueError(err) from err
+    except KeyError as err:
+        _LOGGER.error("MijnAfvalWijzer invalid response from %s", url)
+        raise KeyError(f"Invalid and/or no data received from {url}") from err
+
+
+def _parse_notification_data_raw(response: dict) -> list[dict]:
+    """Parse notification data from the 'mededelingen' response."""
+    mededelingen_data = response.get("data", {}).get("mededelingen", {}).get("data", [])
+
+    if not mededelingen_data:
+        _LOGGER.debug("No 'mededelingen' data found in response")
+        return []
+
+    # Set cutoff date to only show actual notifications
+    cutoff_date = datetime.now().date() - timedelta(days=30)
+
+    notification_data_raw: list[dict] = []
+
+    for item in mededelingen_data:
+        start_date_str = item.get("start_date", "")
+        if start_date_str and start_date_str != "0000-00-00":
+            try:
+                start_date = datetime.strptime(start_date_str, "%Y-%m-%d").date()
+                if start_date < cutoff_date:
+                    _LOGGER.debug(
+                        "Skipping old notification: %s (start_date: %s)",
+                        item.get("title"),
+                        start_date_str,
+                    )
+                    continue
+            except ValueError:
+                _LOGGER.warning("Invalid start_date format: %s", start_date_str)
+                # If date parsing fails, include the notification anyway
+
+        content = item.get("text")
+        if not content:
+            continue
+
+        # Strip HTML tags and decode HTML entities
+        clean_content = re.sub(r"<[^>]*>", "", content)
+        clean_content = unescape(clean_content).strip()
+        clean_content = " ".join(clean_content.split())
+
+        if not clean_content:
+            continue
+
+        notification_data_raw.append(
+            {
+                "id": item.get("id"),
+                "title": item.get("title", ""),
+                "content": clean_content,
+                "position": item.get("position"),
+                "description": item.get("description", ""),
+                "date": item.get("date", ""),
+                "start_date": item.get("start_date", ""),
+                "expiration_date": item.get("expiration_date", ""),
+            }
+        )
+
+    return notification_data_raw
+
+
+def get_notification_data_raw(
+    provider: str,
+    postal_code: str,
+    house_number: str,
+    suffix: str,
+    *,
+    session: requests.Session | None = None,
+    timeout: tuple[float, float] = _DEFAULT_TIMEOUT,
+    verify: bool = True,
+) -> list[dict]:
+    """Collector-style function for fetching notification data.
+
+    Returns a list of notification dictionaries with id, title, content, description and other fields.
+    Returns empty list if provider doesn't support notifications or if there are no notifications.
+    """
+    session = session or requests.Session()
+    url = _build_url(provider, postal_code, house_number, suffix)
+
+    try:
+        response = _fetch_data(
+            session,
+            url,
+            timeout=timeout,
+            verify=verify,
+        )
+
+        notification_data_raw = _parse_notification_data_raw(response)
+        _LOGGER.debug(
+            "Retrieved %s notification(s) from %s", len(notification_data_raw), provider
+        )
+
+        return notification_data_raw
+
+    except requests.exceptions.RequestException as err:
+        _LOGGER.warning("MijnAfvalWijzer notification request error: %s", err)
+        return []
+    except (KeyError, TypeError, ValueError) as err:
+        _LOGGER.warning(
+            "MijnAfvalWijzer: Invalid notification data from %s: %s", url, err
+        )
+        return []

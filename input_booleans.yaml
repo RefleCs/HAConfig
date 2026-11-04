@@ -1,0 +1,32 @@
+# Personen thuis
+  robhome:
+    name: Rob Home
+    initial: on
+    icon: human:male
+    
+  marlieshome:
+    name: Marlies Home
+    initial: on
+    icon: human:female
+    
+  andrahome:
+    name: Andra Home
+    initial: on
+    icon: human:female
+    
+  elisahome:
+    name: Elisa Home
+    initial: on
+    icon: human:female
+    
+  homeoccupied:
+    initial: on
+    
+# Afvalkalender
+  waste_moved:
+    name: Waste has been moved
+    initial: 'off'
+    icon: mdi:delete-empty
+  waste_reminder:
+    name: Waste reminder enabled
+    initial: 'on'

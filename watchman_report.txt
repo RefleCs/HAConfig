@@ -1,0 +1,46 @@
+-== Watchman Report ==- 
+
+-== Congratulations, all 26 services from your config are available!
+
+-== Missing 26 entity(ies) from 123 found in your config:
++--------------------------------+---------+--------------------------------------------------------------+
+| Entity ID                      | State   | Location                                                     |
++--------------------------------+---------+--------------------------------------------------------------+
+| counter.taken_teller           | missing | scripts.yaml:255,264,273                                     |
+| select.the_big_whisperer_heate | unavail | scripts.yaml:336                                             |
+| d_seat_rear_left               |         |                                                              |
+| climate.toon                   | missing | ui-lovelace-mobile.yaml:17                                   |
+| sensor.afvalwijzer_next_item   | unavail | ui-lovelace-mobile.yaml:61,415                               |
+| sensor.afvalwijzer_restafval   | missing | ui-lovelace-mobile.yaml:107,429                              |
+| script.veronicadisneyxd        | missing | ui-lovelace-mobile.yaml:297                                  |
+| light.slaapkamer_main          | missing | ui-lovelace-mobile.yaml:339,349                              |
+| sensor.the_whisperer_charging_ | missing | ui-lovelace-mobile.yaml:456                                  |
+| rate_sensor                    |         |                                                              |
+| sensor.the_whisperer_battery_s | missing | ui-lovelace-mobile.yaml:461                                  |
+| ensor                          |         |                                                              |
+| sensor.the_whisperer_temperatu | missing | ui-lovelace-mobile.yaml:474                                  |
+| re_sensor_inside               |         |                                                              |
+| sensor.the_whisperer_temperatu | missing | ui-lovelace-mobile.yaml:476                                  |
+| re_sensor_outside              |         |                                                              |
+| sensor.tablet                  | missing | sensors.yaml:85                                              |
+| sensor.dark_sky_cloud_coverage | missing | sensors.yaml:92                                              |
+| sensor.sunlight_pct            | unavail | sensors.yaml:110                                             |
+| device_tracker.galaxy_note10_v | missing | automations.yaml:5,19                                        |
+| an_rob                         |         |                                                              |
+| device_tracker.foon_lies       | missing | automations.yaml:33,47                                       |
+| device_tracker.galaxy_note8    | unavail | automations.yaml:61,75                                       |
+| device_tracker.galaxy_note9_va | unavail | automations.yaml:89,103                                      |
+| n_elisa                        |         |                                                              |
+| light.subwoofer                | unavail | automations.yaml:249,265                                     |
+| light.gardenposts_set_of_3     | missing | automations.yaml:419                                         |
+| counter.chore_counter          | missing | automations.yaml:491                                         |
+| light.livingcolors             | unavail | ui-lovelace.yaml:64                                          |
+| light.light                    | missing | ui-lovelace.yaml:67                                          |
+| sensor.sunlight_opacity        | unavail | ui-lovelace.yaml:92,147                                      |
+| sensor.temperature             | missing | ui-lovelace.yaml:1387,1880,2392,2922                         |
+| media_player.vardagsrum        | missing | custom_components/spotcast/services.yaml:22                  |
++--------------------------------+---------+--------------------------------------------------------------+
+
+-== Report created on 13 Mar 2024 19:19:34
+-== Parsed 31 files in 0.61s., ignored 0 files 
+-== Generated in: 0.01s. Validated in: 0.00s.

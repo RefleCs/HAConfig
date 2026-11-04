@@ -1,0 +1,15 @@
+*.db
+*.log
+secrets.yaml
+.storage/
+backups/
+tts/
+smart-home-26632-50f5fa1b1594.json
+*.pem
+*.key
+*.crt
+*.bak
+*.zip
+.vscode/
+__pycache__/
+*.pyc

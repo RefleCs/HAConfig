@@ -1,0 +1,13 @@
+- platform: group
+  name: family
+  services:
+    - service: mobile_app_robs_s26_ultra
+    - service: mobile_app_foon_lies
+    - service: mobile_app_phone_liesje
+    - service: mobile_app_sm_s928b
+
+- platform: group
+  name: ouders
+  services:
+    - service: mobile_app_robs_s26_ultra
+    - service: mobile_app_foon_lies

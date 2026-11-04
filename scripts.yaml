@@ -1,0 +1,265 @@
+start_netflix:
+  alias: Start Netflix
+  sequence:
+  - service: remote.send_command
+    data:
+      entity_id: remote.hubbie
+      command:
+      - 2
+      - 0
+      - 0
+      - Red
+      - Red
+      device: KPN DVR
+  - service: remote.send_command
+    data:
+      entity_id: remote.hubbie
+      command:
+      - Red
+      device: KPN DVR
+npo1:
+  alias: Start NPO 1
+  sequence:
+  - service: remote.send_command
+    data:
+      entity_id: remote.hubbie
+      command:
+      - 1
+      device: KPN DVR
+npo2:
+  alias: Start NPO 2
+  sequence:
+  - service: remote.send_command
+    data:
+      entity_id: remote.hubbie
+      command:
+      - 2
+      device: KPN DVR
+npo3:
+  alias: Start NPO 3
+  sequence:
+  - service: remote.send_command
+    data:
+      entity_id: remote.hubbie
+      command:
+      - 3
+      device: KPN DVR
+rtl4:
+  alias: Start RTL 4
+  sequence:
+  - service: remote.send_command
+    data:
+      entity_id: remote.hubbie
+      command:
+      - 4
+      device: KPN DVR
+rtl5:
+  alias: Start RTL 5
+  sequence:
+  - service: remote.send_command
+    data:
+      entity_id: remote.hubbie
+      command:
+      - 5
+      device: KPN DVR
+sbs6:
+  alias: Start SBS 6
+  sequence:
+  - service: remote.send_command
+    data:
+      entity_id: remote.hubbie
+      command:
+      - 6
+      device: KPN DVR
+rtl7:
+  alias: Start RTL 7
+  sequence:
+  - service: remote.send_command
+    data:
+      entity_id: remote.hubbie
+      command:
+      - 7
+      device: KPN DVR
+net5:
+  alias: Start Net 5
+  sequence:
+  - service: remote.send_command
+    data:
+      entity_id: remote.hubbie
+      command:
+      - 8
+      device: KPN DVR
+voronicadisneyxd:
+  alias: Start Veronica/DisneyXD
+  sequence:
+  - service: remote.send_command
+    data:
+      entity_id: remote.hubbie
+      command:
+      - 9
+      device: KPN DVR
+rtl8:
+  alias: Start RTL 8
+  sequence:
+  - service: remote.send_command
+    data:
+      entity_id: remote.hubbie
+      command:
+      - 1
+      - 0
+      device: KPN DVR
+discovery:
+  alias: Start Discovery
+  sequence:
+  - service: remote.send_command
+    data:
+      entity_id: remote.hubbie
+      command:
+      - 1
+      - 5
+      device: KPN DVR
+fox:
+  alias: Start FOX
+  sequence:
+  - service: remote.send_command
+    data:
+      entity_id: remote.hubbie
+      command:
+      - 1
+      - 6
+      device: KPN DVR
+tlc:
+  alias: Start TLC
+  sequence:
+  - service: remote.send_command
+    data:
+      entity_id: remote.hubbie
+      command:
+      - 1
+      - 7
+      device: KPN DVR
+natgeo:
+  alias: Start National Geographic
+  sequence:
+  - service: remote.send_command
+    data:
+      entity_id: remote.hubbie
+      command:
+      - 1
+      - 8
+      device: KPN DVR
+sbs9:
+  alias: Start SBS 9
+  sequence:
+  - service: remote.send_command
+    data:
+      entity_id: remote.hubbie
+      command:
+      - 1
+      - 9
+      device: KPN DVR
+radio538:
+  alias: Start Radio 538
+  sequence:
+  - service: remote.send_command
+    data:
+      entity_id: remote.hubbie
+      command:
+      - 8
+      - 0
+      - 9
+      device: KPN DVR
+radio1:
+  alias: Start NPO Radio 1
+  sequence:
+  - service: remote.send_command
+    data:
+      entity_id: remote.hubbie
+      command:
+      - 8
+      - 0
+      - 1
+      device: KPN DVR
+radio2:
+  alias: Start NPO Radio 2
+  sequence:
+  - service: remote.send_command
+    data:
+      entity_id: remote.hubbie
+      command:
+      - 8
+      - 0
+      - 2
+      device: KPN DVR
+3fm:
+  alias: Start NPO 3FM
+  sequence:
+  - service: remote.send_command
+    data:
+      entity_id: remote.hubbie
+      command:
+      - 8
+      - 0
+      - 3
+      device: KPN DVR
+radio4:
+  alias: Start NPO Radio 4
+  sequence:
+  - service: remote.send_command
+    data:
+      entity_id: remote.hubbie
+      command:
+      - 8
+      - 0
+      - 4
+      device: KPN DVR
+radio5:
+  alias: Start NPO Radio 5
+  sequence:
+  - service: remote.send_command
+    data:
+      entity_id: remote.hubbie
+      command:
+      - 8
+      - 0
+      - 5
+      device: KPN DVR
+skyradio:
+  alias: Start SkyRadio
+  sequence:
+  - service: remote.send_command
+    data:
+      entity_id: remote.hubbie
+      command:
+      - 8
+      - 0
+      - 8
+      device: KPN DVR
+qmusic:
+  alias: Start Q-Music
+  sequence:
+  - service: remote.send_command
+    data:
+      entity_id: remote.hubbie
+      command:
+      - 8
+      - 1
+      - 1
+      device: KPN DVR
+the_big_whisperer_heated_seat_rear_left_to_low:
+  alias: The Big Whisperer Heated Seat Rear Left to Low
+  sequence:
+  - condition: state
+    entity_id: select.the_big_whisperer_heated_seat_rear_left
+    state: Low
+  mode: single
+  icon: mdi:car-seat-heater
+test_tts:
+  alias: Test TTS
+  sequence:
+  - service: tts.google_translate_say
+    data:
+      cache: false
+      entity_id: media_player.woonkamer
+      message: testje van tekst naar spraak
+  mode: single

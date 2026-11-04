@@ -1,0 +1,132 @@
+"""Afvalwijzer sensor."""
+
+from __future__ import annotations
+
+import logging
+from typing import Any
+
+import voluptuous as vol
+
+from homeassistant.components.sensor import PLATFORM_SCHEMA
+from homeassistant.config_entries import ConfigEntry
+from homeassistant.core import HomeAssistant, callback
+from homeassistant.helpers import config_validation as cv
+
+from .const.const import (
+    CONF_COLLECTOR,
+    CONF_DEFAULT_LABEL,
+    CONF_EXCLUDE_LIST,
+    CONF_EXCLUDE_PICKUP_TODAY,
+    CONF_FRIENDLY_NAME,
+    CONF_HOUSE_NUMBER,
+    CONF_POSTAL_CODE,
+    CONF_STREET_NAME,
+    CONF_SUFFIX,
+    DOMAIN,
+)
+from .sensor_custom import CustomSensor
+from .sensor_provider import ProviderSensor
+
+_LOGGER = logging.getLogger(__name__)
+
+PLATFORM_SCHEMA = vol.All(
+    cv.deprecated("id"),
+    cv.deprecated("street_number", replacement_key=CONF_HOUSE_NUMBER),
+    PLATFORM_SCHEMA.extend(
+        {
+            vol.Optional(CONF_COLLECTOR, default="mijnafvalwijzer"): cv.string,
+            vol.Required(CONF_POSTAL_CODE): cv.string,
+            vol.Required(CONF_HOUSE_NUMBER): cv.string,
+            vol.Optional(CONF_SUFFIX, default=""): cv.string,
+            vol.Optional(CONF_STREET_NAME, default=""): cv.string,
+            vol.Optional(CONF_EXCLUDE_PICKUP_TODAY, default=True): cv.boolean,
+            vol.Optional(CONF_EXCLUDE_LIST, default=""): cv.string,
+            vol.Optional(CONF_DEFAULT_LABEL, default="geen"): cv.string,
+            vol.Optional(CONF_FRIENDLY_NAME, default=""): cv.string,
+            vol.Remove("id"): cv.string,
+            vol.Remove("street_number"): cv.string,
+        }
+    ),
+)
+
+
+async def async_setup_platform(
+    hass: HomeAssistant,
+    config: dict[str, Any],
+    async_add_entities,
+    discovery_info=None,
+) -> None:
+    """Set up sensors via YAML or discovery (legacy)."""
+    _LOGGER.warning(
+        "Configuration of the Afvalwijzer integration in YAML is deprecated "
+        "and will be removed in a future release; Your existing configuration "
+        "has been imported into the UI automatically and can be safely removed "
+        "from your configuration.yaml file"
+    )
+    hass.async_create_task(
+        hass.config_entries.flow.async_init(
+            DOMAIN,
+            context={"source": "import"},
+            data=config,
+        )
+    )
+
+
+async def async_setup_entry(
+    hass: HomeAssistant,
+    entry: ConfigEntry,
+    async_add_entities,
+) -> None:
+    """Set up sensors from a config entry (config flow)."""
+    entry_data = hass.data[DOMAIN][entry.entry_id]
+    config: dict[str, Any] = entry_data["config"]
+    coordinator = entry_data["coordinator"]
+
+    _LOGGER.debug(
+        "Setting up Afvalwijzer sensors for provider: %s.",
+        config.get(CONF_COLLECTOR),
+    )
+
+    known_provider_types: set[str] = set()
+    known_custom_types: set[str] = set()
+
+    @callback
+    def _async_add_new_entities() -> None:
+        """Add entities for waste types not seen before.
+
+        Runs on every coordinator refresh so seasonal waste types that
+        appear later (e.g. kerstbomen) get a sensor without a reload.
+        """
+        entities: list[Any] = []
+
+        for wtype in coordinator.waste_data_with_today or {}:
+            if wtype not in known_provider_types:
+                known_provider_types.add(wtype)
+                entities.append(ProviderSensor(hass, wtype, coordinator, config))
+
+        for wtype in coordinator.waste_data_custom or {}:
+            if wtype not in known_custom_types:
+                known_custom_types.add(wtype)
+                entities.append(CustomSensor(hass, wtype, coordinator, config))
+
+        if (
+            getattr(coordinator, "supports_notifications", False)
+            and "notifications" not in known_provider_types
+        ):
+            known_provider_types.add("notifications")
+            entities.append(ProviderSensor(hass, "notifications", coordinator, config))
+            _LOGGER.debug("Added notification sensor for provider")
+
+        if entities:
+            _LOGGER.info("Adding %d sensors for Afvalwijzer.", len(entities))
+            async_add_entities(entities)
+
+    _async_add_new_entities()
+
+    if not known_provider_types and not known_custom_types:
+        _LOGGER.warning(
+            "No entities created yet; check configuration or collector output. "
+            "Sensors will be added once the collector returns data."
+        )
+
+    entry.async_on_unload(coordinator.async_add_listener(_async_add_new_entities))

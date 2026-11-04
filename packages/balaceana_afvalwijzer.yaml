@@ -1,0 +1,142 @@
+###############################################################################
+# PACKAGE: Afvalwijzer Balaceana (modern template syntax)
+###############################################################################
+
+template:
+
+  ###########################################################################
+  # SENSOR: Even week (true/false)
+  ###########################################################################
+  - sensor:
+      - name: "Balaceana Even Week"
+        unique_id: balaceana_even_week
+        state: "{{ (now().isocalendar().week % 2) == 0 }}"
+        icon: mdi:calendar-week
+
+  ###########################################################################
+  # SENSOR: Afvaltype vandaag
+  ###########################################################################
+  - sensor:
+      - name: "Afvaltype Balaceana"
+        unique_id: afvaltype_balaceana
+        state: >
+          {% set weekday = now().weekday() %}
+          {% set evenweek = (now().isocalendar().week % 2) == 0 %}
+          {% if weekday == 1 and evenweek %}
+            PMD & Papier
+          {% elif weekday == 4 %}
+            Restafval
+          {% else %}
+            Geen inzameling
+          {% endif %}
+        icon: >
+          {% set weekday = now().weekday() %}
+          {% set evenweek = (now().isocalendar().week % 2) == 0 %}
+          {% if weekday == 1 and evenweek %}
+            mdi:recycle
+          {% elif weekday == 4 %}
+            mdi:trash-can
+          {% else %}
+            mdi:calendar
+          {% endif %}
+
+  ###########################################################################
+  # SENSOR: Volgende ophaaldag (datum)
+  ###########################################################################
+  - sensor:
+      - name: "Volgende ophaaldag Balaceana"
+        unique_id: volgende_ophaaldag_balaceana
+        state: >
+          {% set today = now().date() %}
+          {% set weekday = today.weekday() %}
+          {% set next_tuesday = today + timedelta(days=(1 - weekday) % 7) %}
+          {% set next_friday = today + timedelta(days=(4 - weekday) % 7) %}
+          {% set tuesday_evenweek = (next_tuesday.isocalendar().week % 2) == 0 %}
+          {{ next_tuesday if tuesday_evenweek else next_friday }}
+        icon: mdi:calendar-clock
+
+  ###########################################################################
+  # SENSOR: Volgende afvaltype
+  ###########################################################################
+  - sensor:
+      - name: "Volgende afvaltype Balaceana"
+        unique_id: volgende_afvaltype_balaceana
+        state: >
+          {% set today = now().date() %}
+          {% set weekday = today.weekday() %}
+          {% set next_tuesday = today + timedelta(days=(1 - weekday) % 7) %}
+          {% set tuesday_evenweek = (next_tuesday.isocalendar().week % 2) == 0 %}
+          {{ "PMD & Papier" if tuesday_evenweek else "Restafval" }}
+        icon: >
+          {% set today = now().date() %}
+          {% set weekday = today.weekday() %}
+          {% set next_tuesday = today + timedelta(days=(1 - weekday) % 7) %}
+          {% set tuesday_evenweek = (next_tuesday.isocalendar().week % 2) == 0 %}
+          {{ "mdi:recycle" if tuesday_evenweek else "mdi:trash-can" }}
+
+  ###########################################################################
+  # SENSOR: Dagen tot ophaaldag
+  ###########################################################################
+  - sensor:
+      - name: "Dagen tot ophaaldag Balaceana"
+        unique_id: dagen_tot_ophaaldag_balaceana
+        state: >
+          {% set today = now().date() %}
+          {% set weekday = today.weekday() %}
+          {% set next_tuesday = today + timedelta(days=(1 - weekday) % 7) %}
+          {% set next_friday = today + timedelta(days=(4 - weekday) % 7) %}
+          {% set tuesday_evenweek = (next_tuesday.isocalendar().week % 2) == 0 %}
+          {{ (next_tuesday - today).days if tuesday_evenweek else (next_friday - today).days }}
+        icon: mdi:calendar-clock
+
+  ###########################################################################
+  # SENSOR: Afvaltype morgen (voor grote tegel in dashboard)
+  ###########################################################################
+  - sensor:
+      - name: "Afvaltype Morgen Balaceana"
+        unique_id: afvaltype_morgen_balaceana
+        state: >
+          {% if states('sensor.dagen_tot_ophaaldag_balaceana')|int == 1 %}
+            {{ states('sensor.volgende_afvaltype_balaceana') }}
+          {% else %}
+            Geen inzameling
+          {% endif %}
+        icon: >
+          {% if states('sensor.dagen_tot_ophaaldag_balaceana')|int == 1 %}
+            {% if states('sensor.volgende_afvaltype_balaceana') == "PMD & Papier" %}
+              mdi:recycle
+            {% else %}
+              mdi:trash-can
+            {% endif %}
+          {% else %}
+            mdi:calendar
+          {% endif %}
+
+  ###########################################################################
+  # SENSOR: Afvaltype overmorgen (voor grote tegel in dashboard)
+  ###########################################################################
+
+  - sensor:
+      - name: "Afvaltype Overmorgen Balaceana"
+        unique_id: afvaltype_overmorgen_balaceana
+        state: >
+          {% if states('sensor.dagen_tot_ophaaldag_balaceana')|int == 2 %}
+            {{ states('sensor.volgende_afvaltype_balaceana') }}
+          {% else %}
+            Geen inzameling
+          {% endif %}
+        icon: >
+          {% if states('sensor.dagen_tot_ophaaldag_balaceana')|int == 2 %}
+            {% if states('sensor.volgende_afvaltype_balaceana') == "PMD & Papier" %}
+              mdi:recycle
+            {% else %}
+              mdi:trash-can
+            {% endif %}
+          {% else %}
+            mdi:calendar
+          {% endif %}
+
+
+###############################################################################
+# EINDE PACKAGE
+###############################################################################

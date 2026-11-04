@@ -1,0 +1,11 @@
+#spotcast:
+#  sp_dc: !secret primary_sp_dc
+#  sp_key: !secret primary_sp_key
+#  country: SE #optional, added in 3.6.24
+#  accounts:
+#    niklas:
+#      sp_dc: !secret niklas_sp_dc
+#      sp_key: !secret niklas_sp_key
+#    ming:
+#      sp_dc: !secret ming_sp_dc
+#      sp_key: !secret ming_sp_key

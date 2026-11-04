@@ -1,0 +1,17 @@
+#############################
+######## Harmony Hub ########
+#############################
+template:
+  - sensor:
+      - name: "Harmony Hub Status"
+        state: >
+          {% set activity = state_attr('remote.hubbie', 'current_activity') %}
+          {% if activity == "PowerOff" %}
+            OFF
+          {% elif activity == "TV Kijken" %}
+            TV
+          {% elif activity == "Radio KPN" %}
+            Radio KPN
+          {% else %}
+            Unknown
+          {% endif %}

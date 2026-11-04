@@ -1,0 +1,33 @@
+- triggers:
+    - trigger: time_pattern
+      hours: "/1"
+    - trigger: homeassistant
+      event: start
+  actions:
+    - action: calendar.get_events
+      target:
+        entity_id: calendar.epic_games_store_gratis_spellen
+      data:
+        duration:
+          hours: 24
+          minutes: 0
+          seconds: 0
+      response_variable: my_games
+  sensor:
+    - name: Epic Store Free Games
+      unique_id: epicstorefreegamessensorid1
+      icon: mdi:controller
+      state: "{{ states('calendar.epic_games_store_gratis_spellen') }}"
+      attributes:
+        gamenname_one: >
+          {% set ev = my_games['calendar.epic_games_store_gratis_spellen'].events %}
+          {{ ev[0].summary if ev | count > 0 else '' }}
+        gamendescription_one: >
+          {% set ev = my_games['calendar.epic_games_store_gratis_spellen'].events %}
+          {{ ev[0].description if ev | count > 0 else '' }}
+        gamenname_two: >
+          {% set ev = my_games['calendar.epic_games_store_gratis_spellen'].events %}
+          {{ ev[1].summary if ev | count > 1 else '' }}
+        gamendescription_two: >
+          {% set ev = my_games['calendar.epic_games_store_gratis_spellen'].events %}
+          {{ ev[1].description if ev | count > 1 else '' }}

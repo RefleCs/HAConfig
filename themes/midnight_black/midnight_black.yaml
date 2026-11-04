@@ -1,0 +1,141 @@
+---
+#
+# Midnight Black
+# Near-black base with a blue glow, Electric Cobalt as main color, Acid Lime only for "active" things.
+# Red is reserved for alerts and errors.
+#
+# Palette
+#   Midnight Black  #030407   page background
+#   Surface         #0B0F18   cards, dialogs, inputs
+#   Electric Cobalt #1558C9   buttons, selected fills (white text on it = 6.4:1)
+#   Bright Cobalt   #4C8DFF   icons, links, text accents (on black = 6.4:1)
+#   Acid Lime       #D4FF24   active states only (on black = 17.7:1)
+#   Alert Red       #E5484D   errors, alarms, warnings
+#
+Midnight Black:
+  # Core colors
+  primary-color: "#1558C9"
+  dark-primary-color: "#0E3F94"
+  light-primary-color: "#4C8DFF"
+  accent-color: "#D4FF24"
+  primary-background-color: "#030407"
+  secondary-background-color: "#0B0F18"
+  divider-color: "rgba(255, 255, 255, 0.08)"
+
+  # Dashboard background: black with a cobalt glow top-left and bottom-right
+  lovelace-background: "radial-gradient(ellipse 80% 60% at 10% 0%, rgba(21, 88, 201, 0.45) 0%, rgba(21, 88, 201, 0) 70%), radial-gradient(ellipse 70% 50% at 100% 100%, rgba(21, 88, 201, 0.28) 0%, rgba(21, 88, 201, 0) 70%), linear-gradient(180deg, #030407 0%, #050A18 100%)"
+
+  # Text
+  primary-text-color: "#ECEFF4"
+  secondary-text-color: "#9AA4B5"
+  disabled-text-color: "#5B6472"
+  text-primary-color: "#FFFFFF"
+  text-dark-color: "#030407"
+
+  # Cards: slightly see-through glass so the background glow shows
+  card-background-color: "#0B0F18"
+  ha-card-background: "rgba(11, 15, 24, 0.70)"
+  ha-card-backdrop-filter: "blur(14px)"
+  ha-card-border-radius: 20px
+  ha-card-border-width: 1px
+  ha-card-border-color: "rgba(76, 141, 255, 0.22)"
+  ha-card-box-shadow: "0 4px 24px rgba(0, 0, 0, 0.35)"
+  paper-card-background-color: "rgba(11, 15, 24, 0.70)"
+  rgb-card-background-color: "rgb(11, 15, 24)"
+  clear-background-color: "#0B0F18"
+
+  # Header and sidebar
+  app-header-background-color: "rgba(3, 4, 7, 0.75)"
+  app-header-text-color: "#ECEFF4"
+  sidebar-background-color: "#05070C"
+  sidebar-icon-color: "#8FA3C2"
+  sidebar-text-color: "#C5CEDC"
+  sidebar-selected-background-color: "rgba(21, 88, 201, 0.25)"
+  sidebar-selected-icon-color: "#4C8DFF"
+  sidebar-selected-text-color: "#FFFFFF"
+
+  # Icons and states (lime = on/active)
+  state-icon-color: "#8FA3C2"
+  state-icon-active-color: "#D4FF24"
+  state-icon-unavailable-color: "#5B6472"
+  paper-item-icon-color: "#8FA3C2"
+  paper-item-icon-active-color: "#D4FF24"
+  label-badge-background-color: "#0B0F18"
+  label-badge-text-color: "#ECEFF4"
+  label-badge-red: "#E5484D"
+  label-badge-blue: "#4C8DFF"
+  label-badge-green: "#D4FF24"
+  label-badge-yellow: "#F5C84C"
+
+  # Climate: heating counts as active, so it gets lime instead of orange
+  state-climate-heat-color: "#D4FF24"
+  state-climate-heating-color: "#D4FF24"
+
+  # Status colors
+  error-color: "#E5484D"
+  warning-color: "#F5A524"
+  success-color: "#D4FF24"
+  info-color: "#4C8DFF"
+
+  # Toggles and switches
+  switch-checked-color: "#D4FF24"
+  switch-checked-button-color: "#D4FF24"
+  switch-checked-track-color: "#D4FF24"
+  switch-unchecked-color: "#5B6472"
+  switch-unchecked-button-color: "#8FA3C2"
+  switch-unchecked-track-color: "#1C2433"
+  paper-toggle-button-checked-button-color: "#D4FF24"
+  paper-toggle-button-checked-bar-color: "#D4FF24"
+  paper-toggle-button-unchecked-button-color: "#8FA3C2"
+  paper-toggle-button-unchecked-bar-color: "#1C2433"
+
+  # Sliders
+  paper-slider-knob-color: "#FFFFFF"
+  paper-slider-knob-start-color: "#FFFFFF"
+  paper-slider-pin-color: "#FFFFFF"
+  paper-slider-active-color: "#D4FF24"
+  paper-slider-secondary-color: "#4C8DFF"
+  paper-slider-container-color: "#1C2433"
+  paper-slider-font-color: "#030407"
+
+  # Dialogs and menus (kept solid so text stays readable)
+  paper-dialog-background-color: "#0B0F18"
+  paper-listbox-background-color: "#0B0F18"
+  more-info-header-background: "#0B0F18"
+  mdc-theme-surface: "#0B0F18"
+  material-background-color: "#0B0F18"
+  md-list-container-color: "transparent"
+
+  # Tables
+  table-row-background-color: "#0B0F18"
+  table-row-alternative-background-color: "#0F1420"
+
+  # Code and markdown
+  code-editor-background-color: "#0B0F18"
+  markdown-code-background-color: "#121826"
+  codemirror-property: "#4C8DFF"
+  lumo-body-text-color: "#ECEFF4"
+
+  # Input fields (fixes white-on-white fields in HA 2026.x)
+  ha-color-form-background: "#121826"
+  ha-color-form-background-hover: "#18202F"
+  ha-color-form-background-disabled: "#0D121C"
+  input-fill-color: "#121826"
+  input-disabled-fill-color: "#0D121C"
+  input-ink-color: "#ECEFF4"
+  input-label-ink-color: "#9AA4B5"
+  input-disabled-ink-color: "#5B6472"
+  input-dropdown-icon-color: "#9AA4B5"
+  input-idle-line-color: "#3A4456"
+  input-hover-line-color: "#4C8DFF"
+  mdc-text-field-fill-color: "#121826"
+  mdc-text-field-disabled-fill-color: "#0D121C"
+  mdc-text-field-ink-color: "#ECEFF4"
+  mdc-text-field-label-ink-color: "#9AA4B5"
+  mdc-text-field-disabled-ink-color: "#5B6472"
+  mdc-text-field-idle-line-color: "#3A4456"
+  mdc-text-field-hover-line-color: "#4C8DFF"
+  mdc-select-fill-color: "#121826"
+  mdc-select-ink-color: "#ECEFF4"
+  mdc-select-label-ink-color: "#9AA4B5"
+  mdc-select-dropdown-icon-color: "#9AA4B5"

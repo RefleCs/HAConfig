@@ -1,0 +1,44 @@
+{
+    "entity": {
+        "button": {
+            "clear_priority": {
+                "default": "mdi:priority-high"
+            }
+        },
+        "switch": {
+            "all": {
+                "default": "mdi:power"
+            },
+            "smoothing": {
+                "default": "mdi:blur"
+            },
+            "blackbar_detection": {
+                "default": "mdi:crop-free"
+            },
+            "forwarder": {
+                "default": "mdi:send"
+            },
+            "boblight_server": {
+                "default": "mdi:server"
+            },
+            "platform_capture": {
+                "default": "mdi:video-input-antenna"
+            },
+            "led_device": {
+                "default": "mdi:lightbulb-multiple"
+            },
+            "usb_capture": {
+                "default": "mdi:usb"
+            },
+            "hdr_tone_mapping": {
+                "default": "mdi:contrast-box"
+            },
+            "smoothing_anti_flicker": {
+                "default": "mdi:flash"
+            },
+            "smoothing_continuous_output": {
+                "default": "mdi:led-on"
+            }
+        }
+    }
+}

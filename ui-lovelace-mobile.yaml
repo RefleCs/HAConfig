@@ -1,0 +1,617 @@
+views:
+  - title: Dashboard
+    path: dashboard
+    icon: mdi:home-outline
+    badges: []
+    cards:
+      - type: grid
+        columns: 1
+        square: false
+        cards:
+          - type: weather-forecast
+            entity: weather.home
+            name: Amersfoort
+            secondary_info_attribute: pressure
+            show_forecast: true
+          - type: custom:simple-thermostat
+            entity: climate.toon
+            show_header: true
+            decimals: '1'
+            control:
+              preset:
+                away:
+                  icon: mdi:logout
+                  name: null
+                comfort:
+                  icon: mdi:sofa
+                  name: null
+                home:
+                  icon: mdi:home
+                  name: null
+                sleep:
+                  icon: mdi:sleep
+                  name: null
+            sensors:
+              - entity: switch.holiday_mode
+                name: Holiday Mode
+            style: |
+              ha-card .mode-item {
+                background: var(--paper-card-background-color);
+              }  
+            name: 'Thermostaat:'
+            icon: mdi:fire
+          - type: vertical-stack
+            cards:
+              - type: glance
+                entities:
+                  - entity: sensor.afvalwijzer_gft
+                    name: GFT
+                    image: /local/mijnafvalwijzer/gft3.png
+                  - entity: sensor.afvalwijzer_papier
+                    name: Papier
+                    image: /local/mijnafvalwijzer/papier3.png
+                  - entity: sensor.afvalwijzer_pmd
+                    name: Plastic
+                    image: /local/mijnafvalwijzer/plastic3.png
+                show_state: true
+                state_color: false
+              - type: entities
+                show_header_toggle: false
+                entities:
+                  - entity: sensor.afvalwijzer_next_item
+                    name: Volgende container
+                  - entity: sensor.afvalwijzer_next_date
+                    name: Datum volgende container
+                  - entity: input_boolean.waste_moved
+                  - entity: input_boolean.waste_reminder
+              - type: horizontal-stack
+                cards:
+                  - type: picture-entity
+                    entity: sensor.afvalwijzer_today
+                    name: Vandaag
+                    state_image:
+                      gft: /local/mijnafvalwijzer/gft3.png
+                      papier: /local/mijnafvalwijzer/papier3.png
+                      restafval: /local/mijnafvalwijzer/rest3.png
+                      pmd: /local/mijnafvalwijzer/plastic3.png
+                      kerstbomen: /local/mijnafvalwijzer/kliko3.png
+                      Geen: /local/mijnafvalwijzer/kliko3.png
+                  - type: picture-entity
+                    entity: sensor.afvalwijzer_tomorrow
+                    name: Morgen
+                    state_image:
+                      gft: /local/mijnafvalwijzer/gft3.png
+                      papier: /local/mijnafvalwijzer/papier3.png
+                      restafval: /local/mijnafvalwijzer/rest3.png
+                      pmd: /local/mijnafvalwijzer/plastic3.png
+                      kerstbomen: /local/mijnafvalwijzer/kliko3.png
+                      Geen: /local/mijnafvalwijzer/kliko3.png
+                  - type: picture-entity
+                    entity: sensor.afvalwijzer_day_after_tomorrow
+                    name: Overmorgen
+                    state_image:
+                      gft: /local/mijnafvalwijzer/gft3.png
+                      papier: /local/mijnafvalwijzer/papier3.png
+                      restafval: /local/mijnafvalwijzer/rest3.png
+                      pmd: /local/mijnafvalwijzer/plastic3.png
+                      kerstbomen: /local/mijnafvalwijzer/kliko3.png
+                      Geen: /local/mijnafvalwijzer/kliko3.png
+              - type: custom:auto-entities
+                card:
+                  type: glance
+                filter:
+                  include:
+                    - entity_id: sensor.afvalwijzer_gft
+                    - entity_id: sensor.afvalwijzer_papier
+                    - entity_id: sensor.afvalwijzer_pmd
+                    - entity_id: sensor.afvalwijzer_restafval
+                sort:
+                  attribute: days_until_collection_date
+                  method: attribute
+                  numeric: true
+  - title: Multimedia
+    path: multimedia
+    icon: mdi:television-classic
+    badges: []
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: grid
+            columns: 4
+            square: false
+            cards:
+              - type: button
+                tap_action:
+                  action: toggle
+                entity: switch.tv
+                name: TV
+                icon: mdi:television
+                show_state: false
+                show_name: true
+                hold_action:
+                  action: more-info
+                icon_height: 75px
+              - type: button
+                tap_action:
+                  action: toggle
+                entity: switch.radio
+                icon: mdi:radio
+                show_name: true
+                name: Radio
+                icon_height: 75px
+              - type: button
+                tap_action:
+                  action: toggle
+                entity: switch.xboxone
+                name: XBOX
+                show_name: true
+                icon: mdi:microsoft-xbox
+                icon_height: 75px
+              - type: button
+                tap_action:
+                  action: toggle
+                entity: switch.nintendowiiu
+                name: Wii-U
+                icon: mdi:nintendo-wiiu
+                show_name: true
+                icon_height: 75px
+              - type: button
+                tap_action:
+                  action: toggle
+                entity: switch.pc
+                icon_height: 75px
+                show_name: true
+                name: PC/Switch
+                icon: mdi:laptop
+              - type: button
+                tap_action:
+                  action: toggle
+                entity: switch.nes
+                name: NES
+                icon: mdi:gamepad-square-outline
+                show_name: true
+                icon_height: 75px
+              - type: button
+                tap_action:
+                  action: toggle
+                entity: switch.snes
+                name: SNES
+                icon: mdi:gamepad-variant-outline
+                show_name: true
+                icon_height: 75px
+              - type: button
+                tap_action:
+                  action: toggle
+                entity: switch.googlechromecast
+                show_name: true
+                name: Chromecast
+                icon: mdi:cast
+                icon_height: 75px
+          - type: conditional
+            conditions:
+              - entity: sensor.harmony_hub_status
+                state: TV
+            card:
+              type: grid
+              cards:
+                - type: custom:button-card
+                  entity: script.npo1
+                  show_entity_picture: true
+                  entity_picture: /local/images/zenderlogos/npo1.png
+                  name: NPO 1
+                  show_name: false
+                  aspect_ratio: 1/1
+                  tap_action:
+                    action: toggle
+                  haptic: success
+                  size: 80%
+                - type: custom:button-card
+                  entity: script.npo2
+                  show_entity_picture: true
+                  entity_picture: /local/images/zenderlogos/npo2.png
+                  name: NPO 2
+                  show_name: false
+                  aspect_ratio: 1/1
+                  tap_action:
+                    action: toggle
+                  haptic: success
+                  size: 80%
+                - type: custom:button-card
+                  entity: script.npo3
+                  show_entity_picture: true
+                  entity_picture: /local/images/zenderlogos/npo3.png
+                  name: NPO 3
+                  show_name: false
+                  aspect_ratio: 1/1
+                  tap_action:
+                    action: toggle
+                  haptic: success
+                  size: 80%
+                - type: custom:button-card
+                  entity: script.rtl4
+                  show_entity_picture: true
+                  entity_picture: /local/images/zenderlogos/rtl4.png
+                  name: RTL 4
+                  show_name: false
+                  aspect_ratio: 1/1
+                  tap_action:
+                    action: toggle
+                  haptic: success
+                  size: 75%
+                - type: custom:button-card
+                  entity: script.rtl5
+                  show_entity_picture: true
+                  entity_picture: /local/images/zenderlogos/rtl5.png
+                  name: RTL 5
+                  show_name: false
+                  aspect_ratio: 1/1
+                  tap_action:
+                    action: toggle
+                  haptic: success
+                  size: 90%
+                - type: custom:button-card
+                  entity: script.sbs6
+                  show_entity_picture: true
+                  entity_picture: /local/images/zenderlogos/sbs6.png
+                  name: SBS 6
+                  show_name: false
+                  aspect_ratio: 1/1
+                  tap_action:
+                    action: toggle
+                  haptic: success
+                  size: 55%
+                - type: custom:button-card
+                  entity: script.rtl7
+                  show_entity_picture: true
+                  entity_picture: /local/images/zenderlogos/rtl7.png
+                  name: RTL 7
+                  show_name: false
+                  aspect_ratio: 1/1
+                  tap_action:
+                    action: toggle
+                  haptic: success
+                  size: 90%
+                - type: custom:button-card
+                  entity: script.rtl8
+                  show_entity_picture: true
+                  entity_picture: /local/images/zenderlogos/rtl8.png
+                  name: RTL 8
+                  show_name: false
+                  aspect_ratio: 1/1
+                  tap_action:
+                    action: toggle
+                  haptic: success
+                  size: 73%
+                - type: custom:button-card
+                  entity: script.net5
+                  show_entity_picture: true
+                  entity_picture: /local/images/zenderlogos/net5.png
+                  name: NET 5
+                  show_name: false
+                  aspect_ratio: 1/1
+                  tap_action:
+                    action: toggle
+                  haptic: success
+                  size: 72%
+                - type: custom:button-card
+                  entity: script.veronicadisneyxd
+                  show_entity_picture: true
+                  entity_picture: /local/images/zenderlogos/veronicadisneyxd.png
+                  name: Veronica/Disney XD
+                  show_name: false
+                  aspect_ratio: 1/1
+                  tap_action:
+                    action: toggle
+                  haptic: success
+                  size: 70%
+                - type: custom:button-card
+                  entity: script.discovery
+                  show_entity_picture: true
+                  entity_picture: /local/images/zenderlogos/discovery.png
+                  name: Discovery Channel
+                  show_name: false
+                  aspect_ratio: 1/1
+                  tap_action:
+                    action: toggle
+                  haptic: success
+                  size: 90%
+                - type: custom:button-card
+                  entity: script.start_netflix
+                  show_entity_picture: true
+                  entity_picture: /local/images/zenderlogos/netflix.png
+                  name: Netflix
+                  show_name: false
+                  aspect_ratio: 1/1
+                  tap_action:
+                    action: toggle
+                  haptic: success
+                  size: 90%
+              columns: 3
+              square: true
+          - type: conditional
+            conditions:
+              - entity: sensor.harmony_hub_status
+                state: Radio KPN
+            card:
+              type: grid
+              cards:
+                - type: custom:button-card
+                  entity: light.slaapkamer_main
+                  show_entity_picture: true
+                  entity_picture: /local/images/zenderlogos/radio538.png
+                  name: Radio 538
+                  show_name: false
+                  aspect_ratio: 1/1
+                  tap_action:
+                    action: toggle
+                  haptic: success
+                - type: custom:button-card
+                  entity: light.slaapkamer_main
+                  show_entity_picture: true
+                  entity_picture: /local/images/zenderlogos/radio538.png
+                  name: Radio 538
+                  show_name: false
+                  aspect_ratio: 1/1
+                  tap_action:
+                    action: toggle
+                  haptic: success
+              columns: 3
+              square: true
+  - title: Afval
+    path: afval
+    icon: mdi:recycle
+    badges: []
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: horizontal-stack
+            cards:
+              - type: picture-entity
+                entity: sensor.afvalwijzer_today
+                name: Vandaag
+                state_image:
+                  gft: /local/mijnafvalwijzer/gft3.png
+                  papier: /local/mijnafvalwijzer/papier3.png
+                  restafval: /local/mijnafvalwijzer/rest3.png
+                  pmd: /local/mijnafvalwijzer/plastic3.png
+                  kerstbomen: /local/mijnafvalwijzer/kliko3.png
+                  Geen: /local/mijnafvalwijzer/kliko3.png
+              - type: picture-entity
+                entity: sensor.afvalwijzer_tomorrow
+                name: Morgen
+                state_image:
+                  gft: /local/mijnafvalwijzer/gft3.png
+                  papier: /local/mijnafvalwijzer/papier3.png
+                  restafval: /local/mijnafvalwijzer/rest3.png
+                  pmd: /local/mijnafvalwijzer/plastic3.png
+                  kerstbomen: /local/mijnafvalwijzer/kliko3.png
+                  Geen: /local/mijnafvalwijzer/kliko3.png
+              - type: picture-entity
+                entity: sensor.afvalwijzer_day_after_tomorrow
+                name: Overmorgen
+                state_image:
+                  gft: /local/mijnafvalwijzer/gft3.png
+                  papier: /local/mijnafvalwijzer/papier3.png
+                  restafval: /local/mijnafvalwijzer/rest3.png
+                  pmd: /local/mijnafvalwijzer/plastic3.png
+                  kerstbomen: /local/mijnafvalwijzer/kliko3.png
+                  Geen: /local/mijnafvalwijzer/kliko3.png
+          - type: glance
+            entities:
+              - entity: sensor.afvalwijzer_gft
+                name: GFT
+                image: /local/mijnafvalwijzer/gft3.png
+              - entity: sensor.afvalwijzer_papier
+                name: Papier
+                image: /local/mijnafvalwijzer/papier3.png
+              - entity: sensor.afvalwijzer_pmd
+                name: Plastic
+                image: /local/mijnafvalwijzer/plastic3.png
+            show_state: true
+            state_color: false
+          - type: entities
+            show_header_toggle: false
+            entities:
+              - entity: sensor.afvalwijzer_next_item
+                name: Volgende container
+              - entity: sensor.afvalwijzer_next_date
+                name: Datum volgende container
+              - entity: input_boolean.waste_moved
+              - entity: input_boolean.waste_reminder
+          - type: custom:auto-entities
+            card:
+              type: glance
+            filter:
+              include:
+                - entity_id: sensor.afvalwijzer_gft
+                - entity_id: sensor.afvalwijzer_papier
+                - entity_id: sensor.afvalwijzer_pmd
+                - entity_id: sensor.afvalwijzer_restafval
+            sort:
+              attribute: days_until_collection_date
+              method: attribute
+              numeric: true
+  - title: Graphs
+    path: graphs
+    icon: mdi:graph
+    badges: []
+    cards:
+      - type: sensor
+        entity: sensor.overloop_sensor_light_level
+        graph: line
+        detail: 2
+        hours_to_show: 24
+        name: 'Overloop: Lichtintensiteit (1 week)'
+      - type: sensor
+        entity: sensor.overloop_sensor_temperature
+        graph: line
+        name: 'Overloop: Temperatuur (1 week)'
+  - theme: Backend-selected
+    icon: mdi:ev-plug-ccs2
+    title: Tesla
+    path: tesla
+    badges: []
+    cards:
+      - type: gauge
+        entity: sensor.the_whisperer_charging_rate_sensor
+        unit: km/u
+        name: Laadsnelheid
+        needle: false
+      - type: gauge
+        entity: sensor.the_whisperer_battery_sensor
+        name: State of Charge
+        max: 100
+        min: 0
+        severity:
+          green: 20
+          yellow: 80
+          red: 5
+      - show_name: true
+        show_icon: true
+        show_state: true
+        type: glance
+        entities:
+          - entity: sensor.the_whisperer_temperature_sensor_inside
+            name: Binnen
+          - entity: sensor.the_whisperer_temperature_sensor_outside
+            name: Buiten
+        title: Temperaturen
+        columns: 2
+        state_color: false
+  - theme: Backend-selected
+    title: Lights
+    path: lights
+    icon: mdi:ceiling-light-multiple-outline
+    badges: []
+    cards: []
+  - theme: Backend-selected
+    title: Ouders
+    visible:
+      - user: 57d06e57961846bdb10270b49f97a021
+      - user: 04eac4449f444f259be0fa8f7544c2e0
+    badges: []
+    cards:
+      - type: entities
+        entities:
+          - entity: input_boolean.taak_2
+          - entity: input_boolean.taak_6
+          - entity: input_boolean.taak_3
+          - entity: input_boolean.taak_1
+          - entity: input_boolean.taak_5
+          - entity: input_datetime.tasks_helper
+        title: Dagelijkse taken
+        show_header_toggle: false
+        state_color: true
+      - type: entities
+        entities: []
+        title: Weekelijkse Taken
+      - type: entities
+        entities:
+          - entity: input_boolean.taak_4
+          - entity: input_boolean.taak_7
+        title: Maandelijkse Taken
+        show_header_toggle: false
+      - type: grid
+        cards:
+          - show_name: true
+            show_icon: true
+            type: button
+            tap_action:
+              action: toggle
+            entity: script.add_one_point
+            name: +1 punt
+          - show_name: true
+            show_icon: true
+            type: button
+            tap_action:
+              action: toggle
+            entity: script.remove_one_point
+            name: '-1 punt'
+          - show_name: true
+            show_icon: true
+            type: button
+            tap_action:
+              action: toggle
+            entity: script.reset_points
+            name: Reset punten
+          - type: markdown
+            content: Verdien zoveel mogelijk punten!
+            title: 'Goal:'
+          - type: gauge
+            entity: counter.tasks_taken_teller
+            max: 10
+          - type: gauge
+            entity: counter.tasks_counter_andra
+          - type: gauge
+            entity: counter.tasks_counter_elisa
+  - theme: Backend-selected
+    title: Andra
+    path: andra
+    icon: ''
+    visible:
+      - user: a2ef5bf43ca84917a50f6cd4188167c5
+      - user: 04eac4449f444f259be0fa8f7544c2e0
+      - user: 57d06e57961846bdb10270b49f97a021
+    badges: []
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: custom:mushroom-title-card
+            title: Roulerende Taken
+          - type: custom:state-switch
+            entity: input_boolean.taak_2
+            states:
+              'off':
+                type: entities
+                entities:
+                  - input_boolean.taak_2
+          - type: custom:state-switch
+            entity: input_boolean.taak_4
+            states:
+              'off':
+                type: entities
+                entities:
+                  - input_boolean.taak_4
+          - type: custom:mushroom-title-card
+            title: Dagelijkse Taken
+          - type: entities
+            entities:
+              - entity: input_boolean.taak_1
+              - entity: input_boolean.taak_5
+            show_header_toggle: false
+  - theme: Backend-selected
+    title: Elisa
+    path: elisa
+    visible:
+      - user: 41b7a0474691406695728cf3daeebafe
+      - user: 57d06e57961846bdb10270b49f97a021
+      - user: 04eac4449f444f259be0fa8f7544c2e0
+    badges: []
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: custom:mushroom-title-card
+            title: Roulerende Taken
+          - type: custom:state-switch
+            entity: input_boolean.taak_6
+            states:
+              'off':
+                type: entities
+                entities:
+                  - input_boolean.taak_6
+          - type: custom:state-switch
+            entity: input_boolean.taak_7
+            states:
+              'off':
+                type: entities
+                entities:
+                  - input_boolean.taak_7
+          - type: custom:mushroom-title-card
+            title: Dagelijkse Taken
+          - type: entities
+            entities:
+              - entity: input_boolean.taak_3
+              - entity: input_boolean.taak_1
+              - entity: input_boolean.taak_5
+            show_header_toggle: false
+

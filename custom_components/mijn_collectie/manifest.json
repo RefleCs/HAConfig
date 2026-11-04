@@ -1,0 +1,10 @@
+{
+  "domain": "mijn_collectie",
+  "name": "Mijn Collectie",
+  "documentation": "https://github.com/local/mijn_collectie",
+  "dependencies": [],
+  "codeowners": [],
+  "requirements": [],
+  "version": "1.0.0",
+  "iot_class": "local_push"
+}
