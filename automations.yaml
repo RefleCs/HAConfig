@@ -208,21 +208,6 @@
     entity_id: light.subwoofer
     domain: light
   mode: single
-- id: '1635590244509'
-  alias: Welkom thuis Andra
-  description: ''
-  trigger:
-  - platform: state
-    entity_id: automation.mark_andra_home
-    from: 'off'
-    to: 'on'
-  condition: []
-  action:
-  - service: notify.mobile_app_telefoon_andra
-    data:
-      message: Denk je aan je taakjes en je huiswerk?
-      title: Welkom thuis!
-  mode: single
 - id: '1635688861953'
   alias: 'Lights: Achtertuin - Vijververlichting - Turn on at Sunset'
   description: ''
@@ -512,21 +497,6 @@
       cache: false
       entity_id: media_player.woonkamer
       message: Someone rang the doorbell! Maybe you should go and see who it is.
-- id: '1731332999789'
-  alias: New automation
-  description: ''
-  triggers: []
-  conditions:
-  - condition: template
-    value_template: '{% set n = now() %} {{ (n.month == 11 and n.day == 11 ) }}
-
-      '
-  actions:
-  - action: notify.mobile_app_phone_rob
-    data:
-      message: Het is geen 11-11
-      title: Pfew
-  mode: single
 - id: '1731944942322'
   alias: 'Light: Buitenlamp Schuur aan wanneer het nog donker is ''s ochtends en het
     een doordeweekse dag is'
@@ -750,20 +720,6 @@
     device_id: b929c196f6e6d2866c2c951e244f2228
     entity_id: 38f0dad592e350a217f8592cb17705ab
     domain: light
-  mode: single
-- id: '1758036124286'
-  alias: Test Notification
-  description: Sends a notification when a new free Epic Games Store game is available.
-  triggers: []
-  conditions: []
-  actions:
-  - data:
-      title: Nieuwe gratis Epic Game!
-      message: "Gratis vandaag: {{\n  state_attr('calendar.epic_games_store_gratis_spellen',
-        'message')\n  or 'Bekijk de Epic Games Store'\n}}\n"
-      data:
-        clickAction: https://store.epicgames.com/en-US/free-games
-    action: notify.mobile_app_phone_rob
   mode: single
 - id: '1766496446135'
   alias: Epic Games - Notify New Free Game
