@@ -1,5 +1,8 @@
 *.db
+*.db-shm
+*.db-wal
 *.log
+*.log.fault
 secrets.yaml
 .storage/
 backups/
@@ -10,6 +13,8 @@ smart-home-26632-50f5fa1b1594.json
 *.crt
 *.bak
 *.zip
+.DS_Store
+watchman_report.txt
 .vscode/
 __pycache__/
 *.pyc
