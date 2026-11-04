@@ -1,15 +1,6 @@
 # Configure a default setup of Home Assistant (frontend, api, etc)
 default_config:
 
-#http:
-#  use_x_forwarded_for: true
-#  cors_allowed_origins: https://hass.derooslinden.nl
-#  trusted_proxies:
-#    - 10.20.20.0/24
-# ssl_certificate: /ssl/fullchain.pem
-# ssl_key: /ssl/privkey.pem
-# server_port: 443
-
 frontend:
   themes: !include_dir_merge_named themes
 
@@ -17,17 +8,10 @@ logger:
   default: info
 
 homeassistant:
-  #  name: Home
-  #  latitude: !secret lat_long
-  #  longitude: !secret lon_long
-  #  unit_system: metric
-  #  time_zone: Europe/Amsterdam
-  #  country: NL
   packages: !include_dir_named packages
   allowlist_external_dirs:
     - "/config/tmp"
-
-#tts
+    
 tts:
   - platform: google_translate
 
@@ -39,7 +23,7 @@ spotcast:
   sp_dc: !secret sp_dc
   sp_key: !secret sp_key
 
-#Includes
+# Includes
 group: !include groups.yaml
 automation: !include automations.yaml
 script: !include scripts.yaml
